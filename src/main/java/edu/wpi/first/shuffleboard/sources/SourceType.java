@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public enum SourceType {
 
   NONE(false, "", null),
-  STATIC(false, "example://", s -> DummySource.forTypes(DataType.forName(s)).get()),
+  STATIC(false, "example://", s -> DummySource.forTypes(DataType.forName(s)).orElse(null)),
   NETWORK_TABLE(true, "network_table://", NetworkTableSource::forKey),
   CAMERA_SERVER(true, "camera_server://", __ -> {
     throw new UnsupportedOperationException("Not implemented");
