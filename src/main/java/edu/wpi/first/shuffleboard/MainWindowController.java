@@ -1,7 +1,6 @@
 package edu.wpi.first.shuffleboard;
 
 import com.google.common.io.Files;
-
 import edu.wpi.first.shuffleboard.components.DashboardTabPane;
 import edu.wpi.first.shuffleboard.components.WidgetGallery;
 import edu.wpi.first.shuffleboard.dnd.DataFormats;
@@ -19,19 +18,6 @@ import edu.wpi.first.shuffleboard.util.Storage;
 import edu.wpi.first.shuffleboard.widget.NetworkTableTreeWidget;
 import edu.wpi.first.shuffleboard.widget.Widget;
 import edu.wpi.first.shuffleboard.widget.Widgets;
-
-import org.controlsfx.control.PropertySheet;
-import org.fxmisc.easybind.EasyBind;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -51,6 +37,17 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.PropertySheet;
+import org.fxmisc.easybind.EasyBind;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static edu.wpi.first.shuffleboard.util.TypeUtils.optionalCast;
 
@@ -203,7 +200,7 @@ public class MainWindowController {
    * Otherwise is identical to #saveAs.
    */
   @FXML
-  public void save() {
+  public void save() throws IOException {
     if (currentFile == null) {
       saveAs();
     } else {
@@ -215,12 +212,12 @@ public class MainWindowController {
    * Choose a new file and save the dashboard to that file.
    */
   @FXML
-  private void saveAs() {
+  private void saveAs() throws IOException {
     FileChooser chooser = new FileChooser();
     chooser.getExtensionFilters().setAll(
             new FileChooser.ExtensionFilter("SmartDashboard Save File (.json)", "*.json"));
     if (currentFile == null) {
-      chooser.setInitialDirectory(new File(Storage.STORAGE_DIR));
+      chooser.setInitialDirectory(Storage.getStorageDir());
       chooser.setInitialFileName("smartdashboard.json");
     } else {
       chooser.setInitialDirectory(currentFile.getAbsoluteFile().getParentFile());
@@ -252,9 +249,9 @@ public class MainWindowController {
    * Load the dashboard from a save file.
    */
   @FXML
-  public void load() {
+  public void load() throws IOException {
     FileChooser chooser = new FileChooser();
-    chooser.setInitialDirectory(new File(Storage.STORAGE_DIR));
+    chooser.setInitialDirectory(Storage.getStorageDir());
     chooser.getExtensionFilters().setAll(
             new FileChooser.ExtensionFilter("SmartDashboard Save File (.json)", "*.json"));
 
@@ -324,7 +321,7 @@ public class MainWindowController {
   @FXML
   private void loadPlayback() throws IOException {
     FileChooser chooser = new FileChooser();
-    chooser.setInitialDirectory(new File(Storage.STORAGE_DIR));
+    chooser.setInitialDirectory(Storage.getStorageDir());
     chooser.getExtensionFilters().setAll(
         new FileChooser.ExtensionFilter("FRC Data Recording", "*.frc"));
     final File selected = chooser.showOpenDialog(root.getScene().getWindow());
